@@ -663,28 +663,17 @@ class Program
             masp = columnDataList[0][columnNumber];
             maspList.Add(masp);
         }
-
-        while(true)
-        {
             Yellow();
             Console.Write("Nhập mã hàng mà bạn muốn xóa: ");
-            Console.WriteLine("Nhập [END] để dừng chức năng.");
             White();
             string checkCodecheck = Console.ReadLine();
             string checkCode = checkCodecheck.Replace(",", "-");
             if (checkCode.ToLower() == "end")
-            {
-                Console.WriteLine("Đã thoát khỏi chức năng! Nhấn [Enter] để thoát.");
-                Console.ReadKey();  
-                break;
-            }
             if (maspList.Contains(checkCode))
             {
                 int rowIndex = maspList.IndexOf(checkCode);
-
                 if (rowIndex != 0)
                 {
-
                     White();
                     Console.Write($" Bạn có chắc muốn xóa mã hàng ");
                     DCyan();
@@ -698,44 +687,41 @@ class Program
                     string choice1 = Console.ReadLine();
                     if (choice1 == "1")
                     {
-                        foreach (var arr in columnDataList)
+                    foreach (var arr in columnDataList)
+                    {
+                        if (arr is List<string> list && rowIndex <= list.Count)
                         {
-                            if (arr is List<string> list && rowIndex <= list.Count)
-                            {
-                                list.RemoveAt(rowIndex);
-                            }
+                            list.RemoveAt(rowIndex);
                         }
-
-
-                        White();
-                        Console.WriteLine($"Mã hàng ");
-                        DCyan();
-                        Console.Write($"{checkCode}");
-                        White();
-                        Console.WriteLine(" đã được xóa! Nhấn [Enter] để tiếp tục.");
-                        SaveToCsv();
-                        Console.ReadKey();
                     }
-                    else if (choice1 == "0")
-                    {
-                        Yellow();
-                        Console.WriteLine(" Đã đóng chức năng!");
-                        return;
-                    }
-                    else
-                    {
-                        Yellow();
-                        Console.WriteLine("Lựa chọn không phù hợp, vui lòng chọn lại [Enter].");
-                        Console.ReadKey();
-                    }
+                    White();
+                    Console.WriteLine($"Mã hàng ");
+                    DCyan();
+                    Console.Write($"{checkCode}");
+                    White();
+                    Console.WriteLine(" đã được xóa! Nhấn [Enter] để tiếp tục.");
+                    SaveToCsv();
+                    Console.ReadKey();
+                }
+                else if (choice1 == "0")
+                {
+                    Yellow();
+                    Console.WriteLine(" Đã đóng chức năng!");
+                    return;
                 }
                 else
                 {
                     Yellow();
-                    Console.WriteLine("Số hàng không hợp lệ hoặc vượt quá số hàng hiện có.");
+                    Console.WriteLine("Lựa chọn không phù hợp, vui lòng chọn lại [Enter].");
                     Console.ReadKey();
                 }
             }
+        }
+        else
+        {
+            Yellow();
+            Console.WriteLine("Số hàng không hợp lệ hoặc vượt quá số hàng hiện có.");
+            Console.ReadKey();
         }
     }
     
