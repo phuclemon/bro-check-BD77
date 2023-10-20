@@ -1,6 +1,7 @@
-﻿﻿using System;
+using System;
 using System.IO;
 using System.Text;
+using System.Runtime.CompilerServices;
 
 class Program
 {
@@ -200,7 +201,7 @@ class Program
             }
 
             White();
-            Console.WriteLine($" ({salesQuantities[i]})");  
+            Console.WriteLine($" ({salesQuantities[i]})");
         }
     }
     // Hàm trả về số lượng hàng tối đa trong danh sách cột
@@ -428,6 +429,8 @@ class Program
         columnDataList[columnDataList.Count - 2].Add(loiNhuan.ToString());
         SaveToCsv();
     }
+
+    // Hàm đọc dữ liệu từ file CSV và tạo danh sách cột
 
     // Hàm chỉnh sửa giá trị ô trong bảng -- cần sửa
     static void EditCellValue()
@@ -663,30 +666,33 @@ class Program
             masp = columnDataList[0][columnNumber];
             maspList.Add(masp);
         }
-            Yellow();
-            Console.Write("Nhập mã hàng mà bạn muốn xóa: ");
-            White();
-            string checkCodecheck = Console.ReadLine();
-            string checkCode = checkCodecheck.Replace(",", "-");
-            if (checkCode.ToLower() == "end")
-            if (maspList.Contains(checkCode))
-            {
-                int rowIndex = maspList.IndexOf(checkCode);
-                if (rowIndex != 0)
-                {
-                    White();
-                    Console.Write($" Bạn có chắc muốn xóa mã hàng ");
-                    DCyan();
-                    Console.Write($"{checkCode}");
-                    White();
-                    Console.Write(" không? \n" +
-                                    "1 - Xóa \n" +
-                                    "0 - Thoát \n");
 
-                    White();
-                    string choice1 = Console.ReadLine();
-                    if (choice1 == "1")
-                    {
+
+        Yellow();
+        Console.Write("Nhập mã hàng mà bạn muốn xóa: ");
+        White();
+        string checkCodecheck = Console.ReadLine();
+        string checkCode = checkCodecheck.Replace(",", "-");
+        if (maspList.Contains(checkCode))
+        {
+            int rowIndex = maspList.IndexOf(checkCode);
+
+            if (rowIndex != 0)
+            {
+
+                White();
+                Console.Write($" Bạn có chắc muốn xóa mã hàng ");
+                DCyan();
+                Console.Write($"{checkCode}");
+                White();
+                Console.Write(" không? \n" +
+                                  "1 - Xóa \n" +
+                                  "0 - Thoát \n");
+
+                White();
+                string choice1 = Console.ReadLine();
+                if (choice1 == "1")
+                {
                     foreach (var arr in columnDataList)
                     {
                         if (arr is List<string> list && rowIndex <= list.Count)
@@ -694,6 +700,8 @@ class Program
                             list.RemoveAt(rowIndex);
                         }
                     }
+
+
                     White();
                     Console.WriteLine($"Mã hàng ");
                     DCyan();
@@ -790,7 +798,6 @@ class Program
                 }
             }
         }
-
         Yellow();
         Console.Write("Sản phẩm có doanh thu cao nhất là: ");
         DCyan();
