@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Runtime.CompilerServices;
 
 class Program
 {
@@ -9,7 +8,7 @@ class Program
     static List<List<string>> columnDataList = new List<List<string>>();
 
     // Đường dẫn đến file CSV
-    static string csvFilePath = @"Book1.csv";
+    static string csvFilePath = "/Users/phuclemon/Downloads/abctest1-3/Book1.csv";
 
     // Đổi màu nhanh 
     static void White()
@@ -96,22 +95,22 @@ class Program
         for (int i = 0; i < columnDataList.Count; i++)
         {
             string header = columnDataList[i][0].Trim('\"');
-            Console.Write($"| {header} ".PadRight(columnWidths[i] + 3));
+            Console.Write($"| {header} ".PadRight(columnWidths[i] + 3)); // thay thế dấu nháy """
         }
 
         Console.WriteLine("|");
 
 
         // In đường kẻ ngăn cách header và dữ liệu
-        for (int i = 0; i < columnDataList.Count; i++)
+        for (int i = 0; i < columnDataList.Count; i++) // for theo số lượng cột
         {
-            Console.Write($"+{new string('-', columnWidths[i] + 2)}");
+            Console.Write($"+{new string('-', columnWidths[i] + 2)}"); // thay thế dấu nháy ""
         }
 
         Console.WriteLine("+");
 
         // In dữ liệu
-        for (int i = 1; i < GetMaxLength(); i++)
+        for (int i = 1; i < GetMaxLength(); i++) // for theo số lượng hàng
         {
             for (int j = 0; j < columnDataList.Count; j++)
             {
@@ -138,10 +137,10 @@ class Program
         for (int i = 1; i < GetMaxLength(); i++)
         {
             string productName = columnDataList[1][i].Replace("\"", ""); // Lấy tên sản phẩm từ cột "Tên sản phẩm"
-            if (double.TryParse(columnDataList[6][i], out double revenue)) // Lấy doanh thu từ cột "Lợi nhuận"
+            if (double.TryParse(columnDataList[6][i], out double profit)) // Lấy doanh thu từ cột "Lợi nhuận"
             {
                 productNames.Add(productName);
-                profits.Add(revenue);
+                profits.Add(profit);
             }
         }
 
@@ -219,8 +218,8 @@ class Program
                 }
             }
         }
-
         return maxLength;
+        // = return columnDataList[0].Count;
     }
 
     //  Hàm tìm kiếm thông tin hàng
@@ -355,11 +354,11 @@ class Program
                 {
                     if (i == 2)
                     {
-                        slnhap = double.Parse(userInput);
+                        slnhap = double.Parse(userInput);/////
                     }
                     else if (i == 3)
                     {
-                        giaVon = double.Parse(userInput);
+                        giaVon = double.Parse(userInput);/////
                     }
 
                     columnDataList[i].Add(userInput);
@@ -513,31 +512,10 @@ class Program
                                 // Kiểm tra xem cột "Lợi nhuận" có thể chỉnh sửa hay không
                                 if (columnIndex == 7)
                                 {
-                                    int i = rowIndex;
-                                    if (float.TryParse(columnDataList[6][i], out float loiNhuanValue) &&
-                                        loiNhuanValue != 0 ||
-                                        loiNhuanValue.ToString() == string.Empty) // Kiểm tra giá trị Lợi nhuận hiện tại
-                                    {
                                         Yellow();
                                         Console.WriteLine("Không thể chỉnh sửa cột Lợi Nhuận");
                                         Console.ReadKey();
                                         return;
-                                    }
-                                    else
-                                    {
-                                        // Tính toán giá trị lợi nhuận dựa trên các cột khác
-                                        double giaVon, giaBanRa, soLuongBanRa;
-
-                                        if (double.TryParse(columnDataList[3][i], out giaVon) &&
-                                            double.TryParse(columnDataList[4][i], out giaBanRa) &&
-                                            double.TryParse(columnDataList[5][i], out soLuongBanRa))
-                                        {
-                                            double loiNhuan = (giaBanRa - giaVon) * soLuongBanRa;
-                                            columnDataList[6][i] = loiNhuan.ToString(); // Cập nhật giá trị lợi nhuận\
-                                            Console.WriteLine($"Cập nhật giá trị Lợi nhuận thành công!");
-                                            SaveToCsv();
-                                        }
-                                    }
                                 }
                                 if (columnIndex == 4 || columnIndex == 5 || columnIndex == 6)
                                 {
@@ -545,7 +523,6 @@ class Program
                                     Console.WriteLine(" * Điều này sẽ dẫn đến sự thay đổi về giá trị trong cột Lợi nhuận * ");
                                     Console.Write($"Nhập giá trị mới cho {columnDataList[columnIndex - 1][0]} của hàng {columnDataList[0][rowIndex]}: ");
                                     string newValue = Console.ReadLine();
-                                    if ()
 
                                     double giaVon, giaBanRa, soLuongBanRa;
                                     int i = rowIndex;
@@ -725,52 +702,52 @@ class Program
                     Console.ReadKey();
                 }
             }
-        }
-        else
-        {
-            Yellow();
-            Console.WriteLine("Số hàng không hợp lệ hoặc vượt quá số hàng hiện có.");
-            Console.ReadKey();
+            else
+            {
+                Yellow();
+                Console.WriteLine("Số hàng không hợp lệ hoặc vượt quá số hàng hiện có.");
+                Console.ReadKey();
+            }
         }
     }
     
     static void StatsticticSumarize()
     {
-        double doanhthumax = double.MinValue;
-        double doanhthumin = double.MaxValue;
-        List<string> dsdoanhthumax = new List<string>();
-        List<string> dsdoanhthumin = new List<string>();
-        int spdabanNhieuNhat = int.MinValue;
-        int spdabanItNhat = int.MaxValue;
-        List<string> dsdoanhthuMax = new List<string>();
-        List<string> dsdoanhthuMin = new List<string>();
+        double loinhuanmax = double.MinValue;
+        double loinhuanmin = double.MaxValue;
+        List<string> dsloinhuanmax = new List<string>();
+        List<string> dsloinhuanmin = new List<string>();  
+        int spdabanNhieuNhat = int.MinValue; //=-99999999999999999 5 2 3 3 6
+        int spdabanItNhat = int.MaxValue;//=999999999999999999999  a=-1
+        List<string> dsloinhuanMax = new List<string>();
+        List<string> dsloinhuanMin = new List<string>();
 
         // Lặp qua danh sách sản phẩm
         for (int i = 1; i < GetMaxLength(); i++)
         {
             string sanpham = columnDataList[1][i].Replace("\"", ""); // Lấy tên sản phẩm từ cột "Tên sản phẩm"
-            if (double.TryParse(columnDataList[6][i], out double doanhthu)) // Lấy doanh thu từ cột "Doanh thu"
+            if (double.TryParse(columnDataList[6][i], out double loinhuan)) // Lấy doanh thu từ cột "Doanh thu"
             {
-                if (doanhthu > doanhthumax)
+                if (loinhuan > loinhuanmax)
                 {
-                    doanhthumax = doanhthu;
-                    dsdoanhthumax.Clear(); // Xóa danh sách hiện tại
-                    dsdoanhthumax.Add(sanpham); // Thêm sản phẩm mới có doanh thu cao nhất
+                    loinhuanmax = loinhuan;
+                    dsloinhuanmax.Clear(); // Xóa danh sách hiện tại
+                    dsloinhuanmax.Add(sanpham); // Thêm sản phẩm mới có doanh thu cao nhất
                 }
-                else if (doanhthu == doanhthumax)
+                else if (loinhuan == loinhuanmax)
                 {
-                    dsdoanhthumax.Add(sanpham); // Thêm sản phẩm có doanh thu cao nhất vào danh sách
+                    dsloinhuanmax.Add(sanpham); // Thêm sản phẩm có doanh thu cao nhất vào danh sách
                 }
 
-                if (doanhthu < doanhthumin)
+                if (loinhuan < loinhuanmin)
                 {
-                    doanhthumin = doanhthu;
-                    dsdoanhthumin.Clear(); // Xóa danh sách hiện tại
-                    dsdoanhthumin.Add(sanpham); // Thêm sản phẩm mới có doanh thu thấp nhất
+                    loinhuanmin = loinhuan;
+                    dsloinhuanmin.Clear(); // Xóa danh sách hiện tại
+                    dsloinhuanmin.Add(sanpham); // Thêm sản phẩm mới có doanh thu thấp nhất
                 }
-                else if (doanhthu == doanhthumin)
+                else if (loinhuan == loinhuanmin)
                 {
-                    dsdoanhthumin.Add(sanpham); // Thêm sản phẩm có doanh thu thấp nhất vào danh sách
+                    dsloinhuanmin.Add(sanpham); // Thêm sản phẩm có doanh thu thấp nhất vào danh sách
                 }
             }
 
@@ -779,33 +756,34 @@ class Program
                 if (spdaban > spdabanNhieuNhat)
                 {
                     spdabanNhieuNhat = spdaban;
-                    dsdoanhthuMax.Clear(); // Xóa danh sách hiện tại
-                    dsdoanhthuMax.Add(sanpham); // Thêm sản phẩm mới có số lượng bán nhiều nhất
+                    dsloinhuanMax.Clear(); // Xóa danh sách hiện tại
+                    dsloinhuanMax.Add(sanpham); // Thêm sản phẩm mới có số lượng bán nhiều nhất
                 }
                 else if (spdaban == spdabanNhieuNhat)
                 {
-                    dsdoanhthuMax.Add(sanpham); // Thêm sản phẩm có số lượng bán nhiều nhất vào danh sách
+                    dsloinhuanMax.Add(sanpham); // Thêm sản phẩm có số lượng bán nhiều nhất vào danh sách
                 }
 
                 if (spdaban < spdabanItNhat)
                 {
                     spdabanItNhat = spdaban;
-                    dsdoanhthuMin.Clear(); // Xóa danh sách hiện tại
-                    dsdoanhthuMin.Add(sanpham); // Thêm sản phẩm mới có số lượng bán thấp nhất
+                    dsloinhuanMin.Clear(); // Xóa danh sách hiện tại
+                    dsloinhuanMin.Add(sanpham); // Thêm sản phẩm mới có số lượng bán thấp nhất
                 }
                 else if (spdaban == spdabanItNhat)
                 {
-                    dsdoanhthuMin.Add(sanpham); // Thêm sản phẩm có số lượng bán thấp nhất vào danh sách
+                    dsloinhuanMin.Add(sanpham); // Thêm sản phẩm có số lượng bán thấp nhất vào danh sách
                 }
             }
         }
+
         Yellow();
-        Console.Write("Sản phẩm có doanh thu cao nhất là: ");
+        Console.Write("Sản phẩm có lợi nhuận cao nhất là: ");
         DCyan();
         int count = 0;
-        foreach (var sanpham in dsdoanhthumax)
+        foreach (var sanpham in dsloinhuanmax)
         {
-            if (count==dsdoanhthumax.Count-1)
+            if (count==dsloinhuanmax.Count-1)
             {
                 Console.Write(sanpham + " ");
             }
@@ -818,17 +796,17 @@ class Program
         }
 
         White();
-        Console.Write("với doanh thu ");
+        Console.Write("với lợi nhuận ");
         DCyan();
-        Console.WriteLine(doanhthumax);
+        Console.WriteLine(loinhuanmax);
 
         Yellow();
-        Console.Write("Sản phẩm có doanh thu thấp nhất là: ");
+        Console.Write("Sản phẩm có lợi nhuận thấp nhất là: ");
         DCyan();
         count = 0;
-        foreach (var sanpham in dsdoanhthumin)
+        foreach (var sanpham in dsloinhuanmin)
         {
-            if (count==dsdoanhthumin.Count-1)
+            if (count==dsloinhuanmin.Count-1)
             {
                 Console.Write(sanpham + " ");
             }
@@ -840,16 +818,16 @@ class Program
             
         }
         White();
-        Console.Write("với doanh thu ");
+        Console.Write("với lợi nhuận ");
         DCyan();
-        Console.WriteLine(doanhthumin);
+        Console.WriteLine(loinhuanmin);
         Yellow();
         Console.Write("Sản phẩm bán nhiều nhất là: ");
         DCyan();
         count = 0;
-        foreach (var sanpham in dsdoanhthuMax)
+        foreach (var sanpham in dsloinhuanMax)
         {
-            if (count==dsdoanhthuMax.Count-1)
+            if (count==dsloinhuanMax.Count-1)
             {
                 Console.Write(sanpham + " ");
             }
@@ -871,9 +849,9 @@ class Program
         Console.Write("Sản phẩm bán thấp nhất là: ");
         DCyan();
         count = 0;
-        foreach (var sanpham in dsdoanhthuMin)
+        foreach (var sanpham in dsloinhuanMin)
         {
-            if (count==dsdoanhthuMin.Count-1)
+            if (count==dsloinhuanMin.Count-1)
             {
                 Console.Write(sanpham + " ");
             }
@@ -969,7 +947,6 @@ class Program
                         Console.Clear();
                         break;
                     case "4":
-
                         DeleteRow();
                         Console.Clear();
                         break;
