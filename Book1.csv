@@ -1,4 +1,4 @@
-Mã sản phẩm,Tên sản phẩm,Số lượng nhập vào,Giá nhập,Giá bán,Số lượng bán ra,Lợi nhuận,Ghi chú
+"""Mã sản phẩm""","""Tên sản phẩm""","""Số lượng nhập vào""","""Giá nhập""","""Giá bán""","""Số lượng bán ra""","""Lợi nhuận""","""Ghi chú"""
 TAO1,"Táo",100,2.5,4,80,120,"Mới nhập hàng"
 CAM2,"Cam",120,2.0,3.5,90,135,"Rất ngon"
 DUA3,"Dứa",80,1.8,3.2,70,168,"Hàng loại A"
