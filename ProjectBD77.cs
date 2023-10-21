@@ -545,6 +545,7 @@ class Program
                                     Console.WriteLine(" * Điều này sẽ dẫn đến sự thay đổi về giá trị trong cột Lợi nhuận * ");
                                     Console.Write($"Nhập giá trị mới cho {columnDataList[columnIndex - 1][0]} của hàng {columnDataList[0][rowIndex]}: ");
                                     string newValue = Console.ReadLine();
+                                    if ()
 
                                     double giaVon, giaBanRa, soLuongBanRa;
                                     int i = rowIndex;
