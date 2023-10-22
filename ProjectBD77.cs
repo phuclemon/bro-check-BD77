@@ -224,9 +224,9 @@ class Program
     }
 
     //  Hàm tìm kiếm thông tin hàng
-    static void FindInformation()
-{
-    // Khởi tạo map đưa cột 0 vào ( cột mã)
+    static void SearchbyCode()
+    {
+         // Khởi tạo map đưa cột 0 vào ( cột mã)
     List<string> maspList = new List<string>();
     string masp;
     for (int columnNumber = 0; columnNumber < columnDataList[0].Count; columnNumber++)
@@ -294,7 +294,431 @@ class Program
         Yellow();
         Console.WriteLine("Không tìm thấy mã hàng.");
     }
+    }
+    static void FindInformation()
+    {
+        while (true)
+        {
+            Yellow();
+            Console.WriteLine("Chọn tùy chọn:");
+            White();
+            Console.WriteLine("1. Tìm theo Số lượng nhập vào");
+            Console.WriteLine("2. Tìm theo Giá bán");
+            Console.WriteLine("3. Tìm theo Giá nhập");
+            Console.WriteLine("4. Tìm theo Số lượng bán ra");
+            Console.WriteLine("5. Tìm theo Lợi nhuận");
+            Console.WriteLine("6. Tìm theo Mã sản phẩm");
+            Console.WriteLine("0. Thoát");
+            Yellow();
+            Console.Write("Nhập lựa chọn: ");
+            White();
+
+            int choice;
+            if (int.TryParse(Console.ReadLine(), out choice))
+            {
+                switch (choice)
+                {
+                    case 1:
+                        SearchByInputQuantity();
+                        break;
+                    case 2:
+                        SearchBySellingPrice();
+                        break;
+                    case 3:
+                        SearchByPurchasePrice();
+                        break;
+                    case 4:
+                        SearchBySalesQuantity();
+                        break;
+                    case 5:
+                        SearchByProfit();
+                        break;
+                    case 6:
+                        SearchbyCode();
+                        break;
+                    case 0:
+                        return; // Thoát khỏi hàm FindInformation
+                    default:
+                        Yellow();
+                        Console.WriteLine("Lựa chọn không hợp lệ. Vui lòng chọn lại.");
+                        break;
+                }
+            }
+            else
+            {
+                Yellow();
+                Console.WriteLine("Lựa chọn không hợp lệ. Vui lòng chọn lại.");
+            }
+        }
+    }
+
+    static void SearchByProfit()
+{
+    Yellow();
+    Console.Write("Nhập lợi nhuận tối thiểu: ");
+    White();
+    if (double.TryParse(Console.ReadLine(), out double minProfit))
+    {
+        // Tính toán độ rộng tối đa của mỗi cột
+        List<int> columnWidths = new List<int>();
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            int maxWidth = columnDataList[i][0].Length;
+            for (int j = 0; j < columnDataList[i].Count; j++)
+            {
+                int length = columnDataList[i][j].Replace("\"", "").Length;
+                if (length > maxWidth)
+                {
+                    maxWidth = length;
+                }
+            }
+
+            columnWidths.Add(maxWidth);
+        }
+
+        Yellow();
+        // In header
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            string header = columnDataList[i][0].Trim('\"');
+            Console.Write($"| {header} ".PadRight(columnWidths[i] + 3));
+        }
+        Console.WriteLine("|");
+
+        // In đường kẻ ngăn cách header và dữ liệu
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            Console.Write($"+{new string('-', columnWidths[i] + 2)}");
+        }
+        Console.WriteLine("+");
+
+        bool found = false;
+
+        // In dữ liệu cho các hàng có lợi nhuận lớn hơn minProfit
+        for (int i = 1; i < GetMaxLength(); i++) // for theo số lượng hàng
+        {
+            double profit = 0;
+            if (double.TryParse(columnDataList[6][i], out profit)) // Lợi nhuận ở cột 6 (sửa lại nếu cột khác)
+            {
+                if (profit >= minProfit)
+                {
+                    found = true;
+                    for (int j = 0; j < columnDataList.Count; j++)
+                    {
+                        string value = columnDataList[j][i].Replace("\"", "");
+                        Console.Write($"| {value.PadRight(columnWidths[j])} ");
+                    }
+                    Console.WriteLine("|");
+                }
+            }
+        }
+
+        if (!found)
+        {
+            Yellow();
+            Console.WriteLine("Không tìm thấy hàng nào có lợi nhuận lớn hơn " + minProfit);
+        }
+    }
+    else
+    {
+        Yellow();
+        Console.WriteLine("Nhập không hợp lệ. Vui lòng nhập một số.");
+    }
 }
+    static void SearchBySalesQuantity()
+{
+    Yellow();
+    Console.Write("Nhập số lượng bán ra tối thiểu: ");
+    White();
+    if (int.TryParse(Console.ReadLine(), out int minSalesQuantity))
+    {
+        // Tính toán độ rộng tối đa của mỗi cột
+        List<int> columnWidths = new List<int>();
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            int maxWidth = columnDataList[i][0].Length;
+            for (int j = 0; j < columnDataList[i].Count; j++)
+            {
+                int length = columnDataList[i][j].Replace("\"", "").Length;
+                if (length > maxWidth)
+                {
+                    maxWidth = length;
+                }
+            }
+
+            columnWidths.Add(maxWidth);
+        }
+
+        Yellow();
+        // In header
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            string header = columnDataList[i][0].Trim('\"');
+            Console.Write($"| {header} ".PadRight(columnWidths[i] + 3));
+        }
+        Console.WriteLine("|");
+
+        // In đường kẻ ngăn cách header và dữ liệu
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            Console.Write($"+{new string('-', columnWidths[i] + 2)}");
+        }
+        Console.WriteLine("+");
+
+        bool found = false;
+
+        // In dữ liệu cho các hàng có số lượng bán ra lớn hơn minSalesQuantity
+        for (int i = 1; i < GetMaxLength(); i++) // for theo số lượng hàng
+        {
+            int salesQuantity = 0;
+            if (int.TryParse(columnDataList[5][i], out salesQuantity)) // Số lượng bán ra ở cột 5 (sửa lại nếu cột khác)
+            {
+                if (salesQuantity >= minSalesQuantity)
+                {
+                    found = true;
+                    for (int j = 0; j < columnDataList.Count; j++)
+                    {
+                        string value = columnDataList[j][i].Replace("\"", "");
+                        Console.Write($"| {value.PadRight(columnWidths[j])} ");
+                    }
+                    Console.WriteLine("|");
+                }
+            }
+        }
+
+        if (!found)
+        {
+            Yellow();
+            Console.WriteLine("Không tìm thấy sản phẩm nào có số lượng bán ra lớn hơn " + minSalesQuantity);
+        }
+    }
+    else
+    {
+        Yellow();
+        Console.WriteLine("Nhập không hợp lệ. Vui lòng nhập một số nguyên.");
+    }
+}
+
+static void SearchByPurchasePrice()
+{
+    Yellow();
+    Console.Write("Nhập giá nhập tối thiểu: ");
+    White();
+    if (double.TryParse(Console.ReadLine(), out double minPurchasePrice))
+    {
+        // Tính toán độ rộng tối đa của mỗi cột
+        List<int> columnWidths = new List<int>();
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            int maxWidth = columnDataList[i][0].Length;
+            for (int j = 0; j < columnDataList[i].Count; j++)
+            {
+                int length = columnDataList[i][j].Replace("\"", "").Length;
+                if (length > maxWidth)
+                {
+                    maxWidth = length;
+                }
+            }
+
+            columnWidths.Add(maxWidth);
+        }
+
+        Yellow();
+        // In header
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            string header = columnDataList[i][0].Trim('\"');
+            Console.Write($"| {header} ".PadRight(columnWidths[i] + 3));
+        }
+        Console.WriteLine("|");
+
+        // In đường kẻ ngăn cách header và dữ liệu
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            Console.Write($"+{new string('-', columnWidths[i] + 2)}");
+        }
+        Console.WriteLine("+");
+
+        bool found = false;
+
+        // In dữ liệu cho các hàng có giá nhập lớn hơn minPurchasePrice
+        for (int i = 1; i < GetMaxLength(); i++) // for theo số lượng hàng
+        {
+            double purchasePrice = 0;
+            if (double.TryParse(columnDataList[3][i], out purchasePrice)) // Giá nhập ở cột 3 (sửa lại nếu cột khác)
+            {
+                if (purchasePrice >= minPurchasePrice)
+                {
+                    found = true;
+                    for (int j = 0; j < columnDataList.Count; j++)
+                    {
+                        string value = columnDataList[j][i].Replace("\"", "");
+                        Console.Write($"| {value.PadRight(columnWidths[j])} ");
+                    }
+                    Console.WriteLine("|");
+                }
+            }
+        }
+
+        if (!found)
+        {
+            Yellow();
+            Console.WriteLine("Không tìm thấy sản phẩm nào có giá nhập lớn hơn " + minPurchasePrice);
+        }
+    }
+    else
+    {
+        Yellow();
+        Console.WriteLine("Nhập không hợp lệ. Vui lòng nhập một số.");
+    }
+}
+static void SearchBySellingPrice()
+{
+    Yellow();
+    Console.Write("Nhập giá bán tối thiểu: ");
+    White();
+    if (double.TryParse(Console.ReadLine(), out double minSellingPrice))
+    {
+        // Tính toán độ rộng tối đa của mỗi cột
+        List<int> columnWidths = new List<int>();
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            int maxWidth = columnDataList[i][0].Length;
+            for (int j = 0; j < columnDataList[i].Count; j++)
+            {
+                int length = columnDataList[i][j].Replace("\"", "").Length;
+                if (length > maxWidth)
+                {
+                    maxWidth = length;
+                }
+            }
+
+            columnWidths.Add(maxWidth);
+        }
+
+        Yellow();
+        // In header
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            string header = columnDataList[i][0].Trim('\"');
+            Console.Write($"| {header} ".PadRight(columnWidths[i] + 3));
+        }
+        Console.WriteLine("|");
+
+        // In đường kẻ ngăn cách header và dữ liệu
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            Console.Write($"+{new string('-', columnWidths[i] + 2)}");
+        }
+        Console.WriteLine("+");
+
+        bool found = false;
+
+        // In dữ liệu cho các hàng có giá bán lớn hơn minSellingPrice
+        for (int i = 1; i < GetMaxLength(); i++) // for theo số lượng hàng
+        {
+            double sellingPrice = 0;
+            if (double.TryParse(columnDataList[4][i], out sellingPrice)) // Giá bán ở cột 4 (sửa lại nếu cột khác)
+            {
+                if (sellingPrice >= minSellingPrice)
+                {
+                    found = true;
+                    for (int j = 0; j < columnDataList.Count; j++)
+                    {
+                        string value = columnDataList[j][i].Replace("\"", "");
+                        Console.Write($"| {value.PadRight(columnWidths[j])} ");
+                    }
+                    Console.WriteLine("|");
+                }
+            }
+        }
+
+        if (!found)
+        {
+            Yellow();
+            Console.WriteLine("Không tìm thấy sản phẩm nào có giá bán lớn hơn " + minSellingPrice);
+        }
+    }
+    else
+    {
+        Yellow();
+        Console.WriteLine("Nhập không hợp lệ. Vui lòng nhập một số.");
+    }
+}
+static void SearchByInputQuantity()
+{
+    Yellow();
+    Console.Write("Nhập số lượng nhập vào tối thiểu: ");
+    White();
+    if (int.TryParse(Console.ReadLine(), out int minInputQuantity))
+    {
+        // Tính toán độ rộng tối đa của mỗi cột
+        List<int> columnWidths = new List<int>();
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            int maxWidth = columnDataList[i][0].Length;
+            for (int j = 0; j < columnDataList[i].Count; j++)
+            {
+                int length = columnDataList[i][j].Replace("\"", "").Length;
+                if (length >= maxWidth)
+                {
+                    maxWidth = length;
+                }
+            }
+
+            columnWidths.Add(maxWidth);
+        }
+
+        Yellow();
+        // In header
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            string header = columnDataList[i][0].Trim('\"');
+            Console.Write($"| {header} ".PadRight(columnWidths[i] + 3));
+        }
+        Console.WriteLine("|");
+
+        // In đường kẻ ngăn cách header và dữ liệu
+        for (int i = 0; i < columnDataList.Count; i++)
+        {
+            Console.Write($"+{new string('-', columnWidths[i] + 2)}");
+        }
+        Console.WriteLine("+");
+
+        bool found = false;
+
+        // In dữ liệu cho các hàng có số lượng nhập vào lớn hơn minInputQuantity
+        for (int i = 1; i < GetMaxLength(); i++) // for theo số lượng hàng
+        {
+            int inputQuantity = 0;
+            if (int.TryParse(columnDataList[2][i], out inputQuantity)) // Số lượng nhập vào ở cột 2 (sửa lại nếu cột khác)
+            {
+                if (inputQuantity >= minInputQuantity)
+                {
+                    found = true;
+                    for (int j = 0; j < columnDataList.Count; j++)
+                    {
+                        string value = columnDataList[j][i].Replace("\"", "");
+                        Console.Write($"| {value.PadRight(columnWidths[j])} ");
+                    }
+                    Console.WriteLine("|");
+                }
+            }
+        }
+
+        if (!found)
+        {
+            Yellow();
+            Console.WriteLine("Không tìm thấy sản phẩm nào có số lượng nhập vào lớn hơn " + minInputQuantity);
+        }
+    }
+    else
+    {
+        Yellow();
+        Console.WriteLine("Nhập không hợp lệ. Vui lòng nhập một số nguyên.");
+    }
+}
+
 
     
 
@@ -891,7 +1315,6 @@ class Program
                             }
                         }
                     }
-
                     writer.WriteLine();
                 }
             }
