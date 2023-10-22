@@ -1295,11 +1295,11 @@ static void SearchByInputQuantity()
         Console.WriteLine(" đã bán");
     }
     // Hàm lưu dữ liệu vào file CSV
-    static void SaveToCsv()
+   static void SaveToCsvlast()
     {
         try
         {
-            using (StreamWriter writer = new StreamWriter(csvFilePath,true))
+            using (StreamWriter writer = new StreamWriter(csvFilePath))//
             {
                 for (int i = 0; i < GetMaxLength(); i++)
                 {
@@ -1327,6 +1327,39 @@ static void SearchByInputQuantity()
             Console.WriteLine("Lỗi khi ghi vào file: " + e.Message);
         }
     }
+   static void SaveToCsv()
+   {
+       try
+       {
+           using (StreamWriter writer = new StreamWriter(csvFilePath,true))
+           {
+               int lastIndex = GetMaxLength() - 1; // Lấy chỉ số của hàng cuối cùng
+               for (int j = 0; j < columnDataList.Count; j++)
+               {
+                   if (columnDataList[j].Count > lastIndex)
+                   {
+                       string value = columnDataList[j][lastIndex];
+                       writer.Write("\"");
+                       writer.Write($"{value}");
+                       writer.Write("\"");
+                       if (j < columnDataList.Count - 1)
+                       {
+                           writer.Write(",");
+                       }
+                   }
+               }
+
+               writer.WriteLine();
+           }
+
+           Yellow();
+           Console.WriteLine("Dữ liệu từ hàng cuối cùng đã được lưu vào file quản lý.");
+       }
+       catch (IOException e)
+       {
+           Console.WriteLine("Lỗi khi ghi vào file: " + e.Message);
+       }
+   }
 
     // Hàm chính
     static void Main()
