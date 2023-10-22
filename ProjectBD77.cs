@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Runtime.CompilerServices;
 
 class Program
 {
@@ -9,7 +8,7 @@ class Program
     static List<List<string>> columnDataList = new List<List<string>>();
 
     // Đường dẫn đến file CSV
-    static string csvFilePath = @"Book1.csv";
+    static string csvFilePath = "/Users/phuclemon/Downloads/abctest1-3/Book1.csv";
 
     // Đổi màu nhanh 
     static void White()
