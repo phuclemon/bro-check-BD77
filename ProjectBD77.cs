@@ -1299,7 +1299,7 @@ static void SearchByInputQuantity()
     {
         try
         {
-            using (StreamWriter writer = new StreamWriter(csvFilePath))
+            using (StreamWriter writer = new StreamWriter(csvFilePath,true))
             {
                 for (int i = 0; i < GetMaxLength(); i++)
                 {
